@@ -1,6 +1,8 @@
 # determine the version number from the #define in libyuv/version.h
+#COMMAND grep --perl-regex --only-matching "(?<=LIBYUV_VERSION )[0-9]+" include/libyuv/version.h
 EXECUTE_PROCESS (
-	COMMAND grep --perl-regex --only-matching "(?<=LIBYUV_VERSION )[0-9]+" include/libyuv/version.h
+	COMMAND grep -o -E "LIBYUV_VERSION [0-9]+" include/libyuv/version.h
+	COMMAND grep -o -E "[0-9]+"
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	OUTPUT_VARIABLE YUV_VERSION_NUMBER
 	OUTPUT_STRIP_TRAILING_WHITESPACE )
@@ -8,7 +10,7 @@ SET ( YUV_VER_MAJOR 0 )
 SET ( YUV_VER_MINOR 0 )
 SET ( YUV_VER_PATCH ${YUV_VERSION_NUMBER} )
 SET ( YUV_VERSION ${YUV_VER_MAJOR}.${YUV_VER_MINOR}.${YUV_VER_PATCH} )
-MESSAGE ( VERBOSE "Building ver.: ${YUV_VERSION}" )
+MESSAGE ( INFO "Building ver.: ${YUV_VERSION}" )
 
 # is this a 32-bit or 64-bit build?
 IF ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
