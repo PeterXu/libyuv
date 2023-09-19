@@ -5,6 +5,7 @@
 PROJECT ( YUV C CXX )	# "C" is required even for C++ projects
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8.12 )
 OPTION( UNIT_TEST "Built unit tests" OFF )
+OPTION( ENABLE_JPEG "Built with jpeg" ON )
 
 SET ( ly_base_dir	${PROJECT_SOURCE_DIR} )
 SET ( ly_src_dir	${ly_base_dir}/source )
@@ -45,11 +46,13 @@ TARGET_LINK_LIBRARIES	( yuvconvert ${ly_lib_static} )
 ADD_EXECUTABLE      ( yuvconstants ${ly_base_dir}/util/yuvconstants.c )
 TARGET_LINK_LIBRARIES  ( yuvconstants ${ly_lib_static} )
 
+if (ENABLE_JPEG)
 find_package ( JPEG )
 if (JPEG_FOUND)
   include_directories( ${JPEG_INCLUDE_DIR} )
   target_link_libraries( ${ly_lib_shared} ${JPEG_LIBRARY} )
   add_definitions( -DHAVE_JPEG )
+endif()
 endif()
 
 if(UNIT_TEST)
